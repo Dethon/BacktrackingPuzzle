@@ -30,7 +30,7 @@ bool Puzzle::solveOne()
 
 void Puzzle::print() const
 {
-	for (auto solution : m_solutions) 
+	for (const auto& solution : m_solutions) 
 	{
 		for (auto i = 0u; i < solution.size(); i++) 
 		{

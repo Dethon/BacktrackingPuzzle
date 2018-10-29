@@ -1,19 +1,20 @@
 #include "Piece.h"
 #include <sstream>
 #include <stdexcept>
+#include <algorithm>
 
 
 Piece::Piece(const std::string & sides, char delim, int id) : 
 	m_id(id)
 {
-	m_sides.reserve(m_numsides);
 	std::stringstream ss;
 	ss.str(sides);
 	std::string item;
 	auto ceroCount = 0, separationCounter = 0, separation = 0, nonCeroCount = 0;
-	while (std::getline(ss, item, delim)) {
-		m_sides.push_back(item);
-		if (item == "0") {
+	for (auto i = 0u; i < m_sides.size() && std::getline(ss, item, delim); i++)
+	{
+		if (item == "0")
+		{
 			if (ceroCount == 0)
 				separationCounter = 0;
 			else
@@ -21,10 +22,11 @@ Piece::Piece(const std::string & sides, char delim, int id) :
 			ceroCount++;
 		}
 		else
+		{
 			separationCounter++;
+		}
+		m_sides[i] = std::move(item);
 	}
-	if (m_sides.size() != m_numsides)
-		throw std::invalid_argument("Wrong number of sides!!! (" + std::to_string(m_sides.size()) + ")");
 
 	classify(ceroCount, separation);
 }
@@ -35,8 +37,7 @@ Piece::~Piece()
 
 void Piece::rotate()
 {
-	m_sides.push_back(m_sides.front());
-	m_sides.erase(m_sides.begin());
+	std::rotate(m_sides.begin(), m_sides.begin() + 1, m_sides.end());
 }
 
 bool Piece::isCorner() const
@@ -49,36 +50,37 @@ bool Piece::isBorder() const
 	return m_border;
 }
 
-size_t Piece::getNumSides() const
+std::string Piece::side(size_t index) const
 {
-	return m_sides.size();
-}
-
-std::string Piece::getSide(int index) const
-{
-	if (index >= m_sides.size())
-		throw std::invalid_argument("The argument is bigger than the array size!!!");
-	return m_sides[index];
+	return m_sides.at(index);
 }
 
 
-bool Piece::tryFitting(const std::vector<std::string>& hole) 
+bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole) 
 {
-	if (getNumSides() != hole.size())
+	if (numSides() != hole.size())
+	{
 		return false;
+	}
 
 	auto tries = 0;
-	for (auto i = 0u; i < m_sides.size(); i++) {
-		if (m_sides[i] != hole[i] && hole[i] != "-") {
-			if (tries < m_sides.size()){
+	for (auto i = 0u; i < m_sides.size(); i++) 
+	{
+		if (m_sides[i] != hole[i] && hole[i] != "-") 
+		{
+			if (tries < m_sides.size())
+			{
 				i = -1;
 				tries++;
 				rotate();
 			}
 			else
+			{
 				return false;
+			}
 		}
 	}
+
 	return true;
 }
 
@@ -86,8 +88,6 @@ int Piece::getID() const
 {
 	return m_id;
 }
-
-
 
 void Piece::classify(int ceroCount, int separation)
 {
@@ -101,11 +101,13 @@ void Piece::classify(int ceroCount, int separation)
 		m_border = true;
 		break;
 	case 2:
-		if (separation == 1) {
+		if (separation == 1) 
+		{
 			m_corner = false;
 			m_border = true;
 		}
-		else {
+		else 
+		{
 			m_corner = true;
 			m_border = false;
 		}

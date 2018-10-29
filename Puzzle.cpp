@@ -44,12 +44,12 @@ void Puzzle::print() const
 	}
 }
 
-size_t Puzzle::getHeight() const
+size_t Puzzle::height() const noexcept
 {
 	return m_height;
 }
 
-size_t Puzzle::getWidth() const
+size_t Puzzle::width() const noexcept
 {
 	return m_width;
 }

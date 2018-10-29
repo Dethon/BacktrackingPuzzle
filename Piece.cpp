@@ -40,12 +40,12 @@ void Piece::rotate()
 	std::rotate(m_sides.begin(), m_sides.begin() + 1, m_sides.end());
 }
 
-bool Piece::isCorner() const
+bool Piece::isCorner() const noexcept
 {
 	return m_corner;
 }
 
-bool Piece::isBorder() const
+bool Piece::isBorder() const noexcept
 {
 	return m_border;
 }
@@ -84,12 +84,12 @@ bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole)
 	return true;
 }
 
-int Piece::getID() const
+int Piece::getID() const noexcept
 {
 	return m_id;
 }
 
-void Piece::classify(int ceroCount, int separation)
+void Piece::classify(int ceroCount, int separation) noexcept
 {
 	switch (ceroCount) {
 	case 0:

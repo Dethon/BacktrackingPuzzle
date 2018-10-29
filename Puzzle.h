@@ -20,9 +20,8 @@ public:
 	bool solveOne();
 	bool solveAll();
 	void print() const;
-
-	size_t getHeight() const;
-	size_t getWidth() const;
+	size_t height() const noexcept;
+	size_t width() const noexcept;
 
 private:
 	bool solve(bool allSolutions);

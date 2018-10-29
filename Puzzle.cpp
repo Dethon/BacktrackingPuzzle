@@ -132,9 +132,10 @@ bool Puzzle::trySides(int row, int column, Piece* piece)
 void Puzzle::storeSolution()
 {
 	auto solution{ std::vector<int>{} };
+	solution.reserve(m_numPieces);
 	for (const auto& piece : m_puzzle)
 	{
 		solution.push_back(piece->getID());
 	}
-	m_solutions.push_back(solution);
+	m_solutions.push_back(std::move(solution));
 }

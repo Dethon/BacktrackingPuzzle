@@ -55,7 +55,6 @@ std::string Piece::side(size_t index) const
 	return m_sides.at(index);
 }
 
-
 bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole) 
 {
 	if (numSides() != hole.size())
@@ -63,14 +62,14 @@ bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole)
 		return false;
 	}
 
-	auto tries = 0;
-	for (auto i = 0u; i < m_sides.size(); i++) 
+	auto i = 0u, tries = 0u;
+	while (i < m_sides.size()) 
 	{
 		if (m_sides[i] != hole[i] && hole[i] != "-") 
 		{
 			if (tries < m_sides.size())
 			{
-				i = -1;
+				i = 0u;
 				tries++;
 				rotate();
 			}
@@ -78,6 +77,10 @@ bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole)
 			{
 				return false;
 			}
+		}
+		else
+		{
+			i++;
 		}
 	}
 

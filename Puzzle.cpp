@@ -56,18 +56,18 @@ size_t Puzzle::width() const noexcept
 
 bool Puzzle::solve(bool allSolutions)
 {
-	for (auto i = 0u; i < m_pieces.size(); i++) {
-		if (m_currentPosition < m_numPieces && isRuleCompilant(m_currentPosition, m_pieces[i].get())) 
+	for (auto i = m_pieces.begin(); i != m_pieces.end(); i++) {
+		if (m_currentPosition < m_numPieces && isRuleCompilant(m_currentPosition, (*i).get())) 
 		{
-			m_puzzle.push_back(std::move(m_pieces[i]));
-			m_pieces.erase(m_pieces.begin() + i);
+			m_puzzle.push_back(std::move(*i));
+			m_pieces.erase(i);
 			m_currentPosition++;
 			auto result = solve(allSolutions);
 			if (result && !allSolutions)
 			{
 				return result;
 			}
-			m_pieces.insert(m_pieces.begin() + i, std::move(m_puzzle.back()));
+			m_pieces.insert(i, std::move(m_puzzle.back()));
 			m_puzzle.pop_back();
 			m_currentPosition--;
 		}

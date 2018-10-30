@@ -15,7 +15,19 @@ private:
 	std::vector<std::vector<int>> m_solutions;
 
 public:
-	Puzzle(size_t height, size_t width, const std::vector<std::string>& pieces);
+	template<class ForwardIterator>
+	Puzzle(ForwardIterator begin, ForwardIterator end, size_t height, size_t width, char separator = ' ') :
+		m_height(height), m_width(width), m_numPieces(height * width), m_currentPosition(0)
+	{
+		static_assert(std::is_same<std::iterator_traits<ForwardIterator>::value_type, std::string>::value, 
+					  "The container must provide std::String encoded pieces");
+		m_puzzle.reserve(m_numPieces);
+		m_pieces.reserve(m_numPieces);
+		for (auto i = 1u; begin != end; i++, begin++)
+		{
+			m_pieces.emplace_back(std::make_unique<Piece>(*begin, separator, i));
+		}
+	}
 	virtual ~Puzzle();
 	bool solveOne();
 	bool solveAll();

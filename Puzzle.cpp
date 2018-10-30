@@ -3,17 +3,6 @@
 #include <iostream>
 
 
-Puzzle::Puzzle(size_t height, size_t width, const std::vector<std::string>& pieces) : 
-	m_height(height), m_width(width), m_numPieces(height * width), m_currentPosition(0)
-{
-	m_puzzle.reserve(m_numPieces);
-	m_pieces.reserve(m_numPieces);
-	for (auto i = 0u; i < pieces.size(); i++)
-	{
-		m_pieces.emplace_back(std::make_unique<Piece>(pieces[i], ' ', i + 1));
-	}
-}
-
 Puzzle::~Puzzle()
 {
 }

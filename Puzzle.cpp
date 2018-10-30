@@ -87,13 +87,11 @@ bool Puzzle::isRuleCompilant(int position, Piece* piece)
 bool Puzzle::trySides(int row, int column, Piece* piece)
 {
 	constexpr auto numsides = Piece::numSides();
-	auto hole{ std::array<std::string, numsides>{} };
-	auto surroundingPositions{ 
-		std::array<std::array<int, 2>, numsides> {{{row, column - 1},
-												{row - 1, column}, 
-												{row, column + 1}, 
-												{row + 1, column}}} 
-	};
+	auto hole = std::array<std::string, numsides>{};
+	auto surroundingPositions = std::array<std::array<int, 2>, numsides> { {{row, column - 1},
+																			{ row - 1, column },
+																			{ row, column + 1 },
+																			{ row + 1, column }} };
 
 	for (auto i = 0u; i < surroundingPositions.size(); i++) 
 	{
@@ -122,7 +120,7 @@ bool Puzzle::trySides(int row, int column, Piece* piece)
 
 void Puzzle::storeSolution()
 {
-	auto solution{ std::vector<int>{} };
+	auto solution = std::vector<int>{};
 	solution.reserve(m_numPieces);
 	for (const auto& piece : m_puzzle)
 	{

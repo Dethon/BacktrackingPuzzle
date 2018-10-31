@@ -4,12 +4,11 @@
 #include <algorithm>
 
 
-Piece::Piece(const std::string & sides, char delim, int id) : 
-	m_id(id)
+Piece::Piece(const std::string& sides, char delim, int id) : 
+	m_id{ id }, m_border{ false }, m_corner{ false }
 {
-	std::stringstream ss;
-	ss.str(sides);
-	std::string item;
+	auto ss = std::stringstream{ sides };
+	auto item = std::string{};
 	auto ceroCount = 0, separationCounter = 0, separation = 0, nonCeroCount = 0;
 	for (auto i = 0u; i < m_sides.size() && std::getline(ss, item, delim); i++)
 	{

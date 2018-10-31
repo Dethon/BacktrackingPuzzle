@@ -62,8 +62,7 @@ bool Piece::tryFitting(const std::array<std::string_view, m_numsides>& hole)
 		return false;
 	}
 
-	auto i = 0u, tries = 0u;
-	while (i < m_sides.size()) 
+	for (auto i = 0u, tries = 0u; i < m_sides.size();)
 	{
 		if (m_sides[i] != hole[i] && hole[i] != "-") 
 		{

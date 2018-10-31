@@ -50,12 +50,12 @@ bool Piece::isBorder() const noexcept
 	return m_border;
 }
 
-std::string Piece::side(size_t index) const
+std::string_view Piece::side(size_t index) const
 {
 	return m_sides.at(index);
 }
 
-bool Piece::tryFitting(const std::array<std::string, m_numsides>& hole) 
+bool Piece::tryFitting(const std::array<std::string_view, m_numsides>& hole) 
 {
 	if (numSides() != hole.size())
 	{

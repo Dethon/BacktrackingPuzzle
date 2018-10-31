@@ -19,8 +19,8 @@ public:
 	void rotate();
 	bool isCorner() const noexcept;
 	bool isBorder() const noexcept;
-	std::string side(size_t index) const;
-	bool tryFitting(const std::array<std::string, m_numsides>& hole);
+	std::string_view side(size_t index) const;
+	bool tryFitting(const std::array<std::string_view, m_numsides>& hole);
 	int getID() const noexcept;
 	static constexpr size_t numSides() noexcept
 	{

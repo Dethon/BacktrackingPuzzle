@@ -87,7 +87,7 @@ bool Puzzle::isRuleCompilant(int position, Piece* piece)
 bool Puzzle::trySides(int row, int column, Piece* piece)
 {
 	constexpr auto numsides = Piece::numSides();
-	auto hole = std::array<std::string, numsides>{};
+	auto hole = std::array<std::string_view, numsides>{};
 	auto surroundingPositions = std::array<std::array<int, 2>, numsides> { {{row, column - 1},
 																			{ row - 1, column },
 																			{ row, column + 1 },

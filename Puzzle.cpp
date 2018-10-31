@@ -45,23 +45,24 @@ size_t Puzzle::width() const noexcept
 
 bool Puzzle::solve(bool allSolutions)
 {
-	for (auto i = 0u; i < m_pieces.size(); i++) {
-		if (m_currentPosition < m_numPieces && isRuleCompilant(m_currentPosition, m_pieces[i].get()))
+	for (auto i = 0u; i < m_remainingpieces.size(); i++) {
+		if (m_currentposition < m_numpieces && isRuleCompilant(m_currentposition, m_pieces[m_remainingpieces[i]]))
 		{
-			m_puzzle.push_back(std::move(m_pieces[i]));
-			m_pieces.erase(m_pieces.begin() + i);
-			m_currentPosition++;
-			auto result = solve(allSolutions);
-			if (result && !allSolutions)
+			m_puzzle.push_back(m_remainingpieces[i]);
+			m_remainingpieces.erase(m_remainingpieces.begin() + i);
+			m_currentposition++;
+		
+			if (auto result = solve(allSolutions); result && !allSolutions)
 			{
 				return result;
 			}
-			m_pieces.insert(m_pieces.begin() + i, std::move(m_puzzle.back()));
+
+			m_remainingpieces.insert(m_remainingpieces.begin() + i, m_puzzle.back());
 			m_puzzle.pop_back();
-			m_currentPosition--;
+			m_currentposition--;
 		}
 	}
-	if (m_currentPosition == m_numPieces) 
+	if (m_currentposition == m_numpieces)
 	{
 		storeSolution();
 		return true;
@@ -70,13 +71,13 @@ bool Puzzle::solve(bool allSolutions)
 	return false;
 }
 
-bool Puzzle::isRuleCompilant(int position, Piece* piece)
+bool Puzzle::isRuleCompilant(int position, Piece& piece)
 {
-	int row = position / static_cast<int>(m_width);
-	int column = position % static_cast<int>(m_width);
-	if ((!piece->isBorder() && !piece->isCorner() && row != 0 && row != m_height - 1 && column != 0 && column != m_width - 1) ||
-		(piece->isBorder() && ((row == 0 || row == m_height - 1) != (column == 0 || column == m_width - 1))) ||
-		(piece->isCorner() && (row == 0 || row == m_height - 1) && (column == 0 || column == m_width - 1)))
+	auto row = position / m_width;
+	auto column = position % m_width;
+	if ((!piece.isBorder() && !piece.isCorner() && row != 0 && row != m_height - 1 && column != 0 && column != m_width - 1) ||
+		(piece.isBorder() && ((row == 0 || row == m_height - 1) != (column == 0 || column == m_width - 1))) ||
+		(piece.isCorner() && (row == 0 || row == m_height - 1) && (column == 0 || column == m_width - 1)))
 	{
 		return trySides(row, column, piece);
 	}	
@@ -84,28 +85,36 @@ bool Puzzle::isRuleCompilant(int position, Piece* piece)
 	return false;
 }
 
-bool Puzzle::trySides(int row, int column, Piece* piece)
+bool Puzzle::trySides(int row, int column, Piece& piece)
 {
 	constexpr auto numsides = Piece::numSides();
 	auto hole = std::array<std::string_view, numsides>{};
-	auto surroundingPositions = std::array<std::array<int, 2>, numsides> { {{row, column - 1},
+	auto surrounding_positions = std::array<std::array<int, 2>, numsides> { {{row, column - 1},
 																			{ row - 1, column },
 																			{ row, column + 1 },
 																			{ row + 1, column }} };
 
-	for (auto i = 0u; i < surroundingPositions.size(); i++) 
+	for (auto i = 0u; i < surrounding_positions.size(); i++)
 	{
-		int r = surroundingPositions[i][0];
-		int c = surroundingPositions[i][1];
-		int l = (r * static_cast<int>(m_width)) + c;
-		if (r >= 0 && r < m_height && c >= 0 && c < m_width && l <= m_currentPosition) 
+		auto r = surrounding_positions[i][0];
+		auto c = surrounding_positions[i][1];
+		auto l = (r * m_width) + c;
+		if (c < m_width &&
+			r < m_height &&
+			c >= 0 && 
+			r >= 0 &&
+			l <= m_currentposition) 
 		{
 			constexpr auto halfpiece = numsides / 2;
 			auto index = (i + halfpiece) % numsides;
-			hole[i] = m_puzzle[l]->side(index);
+			hole[i] = m_pieces[m_puzzle[l]].side(index);
 		}
-		else {
-			if (r < 0 || r >= m_height || c < 0 || c >= m_width)
+		else 
+		{
+			if (c >= m_width ||
+				r >= m_height || 
+				c < 0 || 
+				r < 0)
 			{
 				hole[i] = "0";
 			}
@@ -115,16 +124,16 @@ bool Puzzle::trySides(int row, int column, Piece* piece)
 			}
 		}
 	}
-	return piece->tryFitting(hole);
+	return piece.tryFitting(hole);
 }
 
 void Puzzle::storeSolution()
 {
 	auto solution = std::vector<int>{};
-	solution.reserve(m_numPieces);
+	solution.reserve(m_numpieces);
 	for (const auto& piece : m_puzzle)
 	{
-		solution.push_back(piece->getID());
+		solution.push_back(m_pieces[piece].getID());
 	}
 	m_solutions.push_back(std::move(solution));
 }

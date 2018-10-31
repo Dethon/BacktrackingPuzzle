@@ -6,26 +6,29 @@
 class Puzzle
 {
 private:
-	size_t m_height;
-	size_t m_width;
-	size_t m_numPieces;
-	int m_currentPosition;
-	std::vector<std::unique_ptr<Piece>> m_pieces;
-	std::vector<std::unique_ptr<Piece>> m_puzzle;
+	int m_height;
+	int m_width;
+	int m_currentposition;
+	int m_numpieces;
+	std::vector<Piece> m_pieces;
+	std::vector<unsigned int> m_remainingpieces;
+	std::vector<unsigned int> m_puzzle;
 	std::vector<std::vector<int>> m_solutions;
 
 public:
 	template<class ForwardIterator>
-	Puzzle(ForwardIterator begin, ForwardIterator end, size_t height, size_t width, char separator = ' ') :
-		m_height(height), m_width(width), m_numPieces(height * width), m_currentPosition(0)
+	Puzzle(ForwardIterator begin, ForwardIterator end, int height, int width, char separator = ' ') :
+		m_height{ height }, m_width{ width }, m_numpieces{ height * width }, m_currentposition{ 0 }
 	{
 		static_assert(std::is_same<std::iterator_traits<ForwardIterator>::value_type, std::string>::value, 
 					  "The container must provide std::String encoded pieces");
-		m_puzzle.reserve(m_numPieces);
-		m_pieces.reserve(m_numPieces);
-		for (auto i = 1u; begin != end; i++, begin++)
+		m_puzzle.reserve(m_numpieces);
+		m_pieces.reserve(m_numpieces);
+		m_remainingpieces.reserve(m_numpieces);
+		for (auto i = 0u; begin != end; i++, begin++)
 		{
-			m_pieces.emplace_back(std::make_unique<Piece>(*begin, separator, i));
+			m_pieces.emplace_back(*begin, separator, i + 1);
+			m_remainingpieces.emplace_back(i);
 		}
 	}
 	virtual ~Puzzle();
@@ -37,7 +40,7 @@ public:
 
 private:
 	bool solve(bool allSolutions);
-	bool isRuleCompilant(int position, Piece* piece);
-	bool trySides(int row, int column, Piece* piece);
+	bool isRuleCompilant(int position, Piece& piece);
+	bool trySides(int row, int column, Piece& piece);
 	void storeSolution();
 };

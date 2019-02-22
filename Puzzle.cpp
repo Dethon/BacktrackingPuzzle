@@ -1,6 +1,5 @@
 #include "Puzzle.h"
 #include <array>
-#include <iostream>
 
 
 Puzzle::~Puzzle()
@@ -17,7 +16,7 @@ bool Puzzle::solveOne()
 	return solve(false);
 }
 
-void Puzzle::print() const
+void Puzzle::print(std::ostream& out) const
 {
 	for (const auto& solution : m_solutions) 
 	{
@@ -25,11 +24,11 @@ void Puzzle::print() const
 		{
 			if (i != 0 && i % m_width == 0)
 			{
-				std::cout << std::endl;
+				out << std::endl;
 			}
-			std::cout << solution[i] << " ";
+			out << solution[i] << " ";
 		}
-		std::cout << std::endl << std::endl;
+		out << std::endl << std::endl;
 	}
 }
 
@@ -106,8 +105,8 @@ bool Puzzle::trySides(int row, int column, Piece& piece)
 			l <= m_currentposition) 
 		{
 			constexpr auto halfpiece = numsides / 2;
-			auto index = (i + halfpiece) % numsides;
-			hole[i] = m_pieces[m_puzzle[l]].side(index);
+			auto sideindex = (i + halfpiece) % numsides;
+			hole[i] = m_pieces[m_puzzle[l]].side(sideindex);
 		}
 		else 
 		{

@@ -34,7 +34,7 @@ public:
 	virtual ~Puzzle();
 	bool solveOne();
 	bool solveAll();
-	void print() const;
+	void print(std::ostream& out) const;
 	size_t height() const noexcept;
 	size_t width() const noexcept;
 

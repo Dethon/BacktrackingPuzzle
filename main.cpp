@@ -55,7 +55,7 @@ int main()
 	auto elapsedtime = endtime - starttime;
 
 	std::cout << "Puzzle resolved in " << std::chrono::duration <double, std::milli>(elapsedtime).count() << " ms" << std::endl;
-	puzzle.print();
+	puzzle.print(std::cout);
 
     return 0;
 }

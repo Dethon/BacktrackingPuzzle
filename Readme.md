@@ -1,6 +1,6 @@
 # Backtracking Puzzle
 
-A simple implementation of a backtracking algorithm used to solve a jigsaw like puzzle
+A simple implementation of a backtracking algorithm used to solve a jigsaw like puzzle.
 
 ## Objective
 

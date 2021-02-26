@@ -1,4 +1,4 @@
-// PuzzleAldor.cpp: define el punto de entrada de la aplicación de consola.
+// PuzzleAldor.cpp: define el punto de entrada de la aplicaciÃ³n de consola.
 //
 
 #include <string>
